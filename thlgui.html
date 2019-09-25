@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>
+THL dashboard
+</title>
+<link href="https://fonts.googleapis.com/css?family=Alegreya+Sans+SC&display=swap" rel="stylesheet">
+<style>
+
+body, html {
+  height: 100%;
+  margin: 0;
+  color: #777;
+  font-family: 'Alegreya Sans SC', sans-serif;
+}
+
+#block {
+padding:20px 80px;
+border: 1px solid lightgrey;
+font-size: 22px;
+width: 50%;
+margin: auto;
+position:relative;
+}
+
+#head {
+height: 5%;
+width: 100%;
+}
+
+input {
+width: 25%;
+font-size: 15px;
+padding: 10px 20px;
+margin: 5px;
+}
+
+input[type='button'] {
+background-color: #6CAF70;
+border: none;
+color: white;
+padding: 10px 20px;
+text-decoration: none;
+margin: 4px 2px;
+cursor: pointer;
+}
+
+input[type='button']:hover {
+background-color:  #4CAF50;
+}
+
+input[type='number'] {
+-moz-appearance:textfield;
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+-webkit-appearance: none;
+margin: 0;
+}
+</style>
+</head>
+<body>
+
+<div id="head"></div>
+
+<div id="block">
+
+	<h2>THL dashboard</h2>
+  
+	<div style="width: 100%;">
+  <input type="text" id="login" placeholder="Login" style="width: 40%;">
+  <input type="password" id="wif" placeholder="Wif" style="width: 40%;">
+  </div>
+
+  <div style="padding: 5px 10px; margin-top: 50px;">Contract: Emission</div>
+  <span id="bell" style="padding: 5px 10px; width: 100%; text-align: center;"></span>
+  <div style="width: 100%; border: 0px solid #eee;">
+  <input type="number" id="amount" placeholder="Amount">
+  <input type="button" onclick="emiss()" value="Create">
+  </div>
+ 
+  <div style="padding: 5px 10px; margin-top: 50px;">Contract: Transfer</div>
+  <span id="bell2" style="padding: 5px 10px; width: 100%; text-align: center;"></span>  
+  <div style="width: 100%;">
+  <input type="text" id="to" placeholder="To" >
+  <input type="number" id="transamount" placeholder="Amount">
+  <input type="button" onclick="transfer()" value="Transfer">
+  </div>
+
+
+</div>
+
+<script src="https://unpkg.com/golos-js@0.7.7/dist/golos.min.js"></script>
+<script>
+golos.config.set('websocket','wss://api.golos.blckchnd.com/ws');
+golos.config.set('address_prefix','GLS');
+golos.config.set('chain_id','782a3039b478c839e4cb0c941ff4eaeb7df40bdd68bd441afd444b9da763de12');
+
+
+function emiss() {
+
+
+var login = document.getElementById("login").value.toLowerCase();
+var wif = document.getElementById("wif").value;
+var amount = document.getElementById("amount").value;
+
+login = login.replace(/ /g, "");
+wif = wif.replace(/ /g, "");
+
+golos.broadcast.transfer(wif, login, 'null', amount+' GBG', '{"contractName": "tokens", "contractAction": "emission", "contractPayload": {"symbol": "THL"}}', function(err, result) {
+  console.log(err, result);
+  if(!err){
+
+document.getElementById("bell").innerHTML = "<p style='color: green'>Отправлено</p>";
+setTimeout(function() { document.getElementById("bell").innerHTML = ""; }, 5000);
+
+  }else{
+
+document.getElementById("bell").innerHTML = "<p style='color: red'>Ошибка</p>";
+setTimeout(function() { document.getElementById("bell").innerHTML = ""; }, 5000);
+
+  }
+});
+
+}
+
+function transfer() {
+
+
+var login = document.getElementById("login").value.toLowerCase();
+var wif = document.getElementById("wif").value;
+var to = document.getElementById("to").value.toLowerCase();
+var amount = document.getElementById("transamount").value;
+
+login = login.replace(/ /g, "");
+wif = wif.replace(/ /g, "");
+to = to.replace(/ /g, "");
+
+var memo = {
+
+  "contractName": "tokens", 
+  "contractAction": "transfer", 
+  "contractPayload": {"to": to, "quantity": Number(amount), "symbol": "THL"}
+  
+            }
+
+var tojson = JSON.stringify(memo);
+
+golos.broadcast.transfer(wif, login, 'null', '0.001 GBG', tojson, function(err, result) {
+console.log(err, result);
+ if(!err){
+
+document.getElementById("bell2").innerHTML = "<p style='color: green'>Отправлено</p>";
+setTimeout(function() { document.getElementById("bell2").innerHTML = ""; }, 5000);
+
+  }else{
+
+document.getElementById("bell2").innerHTML = "<p style='color: red'>Ошибка</p>";
+setTimeout(function() { document.getElementById("bell2").innerHTML = ""; }, 5000);
+
+  }
+});
+
+}
+
+</script>
+
+</body>
+</html>

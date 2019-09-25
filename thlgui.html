@@ -113,12 +113,12 @@ golos.broadcast.transfer(wif, login, 'null', amount+' GBG', '{"contractName": "t
   console.log(err, result);
   if(!err){
 
-document.getElementById("bell").innerHTML = "<p style='color: green'>Отправлено</p>";
+document.getElementById("bell").innerHTML = "<p style='color: green'>Done</p>";
 setTimeout(function() { document.getElementById("bell").innerHTML = ""; }, 5000);
 
   }else{
 
-document.getElementById("bell").innerHTML = "<p style='color: red'>Ошибка</p>";
+document.getElementById("bell").innerHTML = "<p style='color: red'>Error</p>";
 setTimeout(function() { document.getElementById("bell").innerHTML = ""; }, 5000);
 
   }
@@ -152,12 +152,12 @@ golos.broadcast.transfer(wif, login, 'null', '0.001 GBG', tojson, function(err, 
 console.log(err, result);
  if(!err){
 
-document.getElementById("bell2").innerHTML = "<p style='color: green'>Отправлено</p>";
+document.getElementById("bell2").innerHTML = "<p style='color: green'>Done</p>";
 setTimeout(function() { document.getElementById("bell2").innerHTML = ""; }, 5000);
 
   }else{
 
-document.getElementById("bell2").innerHTML = "<p style='color: red'>Ошибка</p>";
+document.getElementById("bell2").innerHTML = "<p style='color: red'>Error</p>";
 setTimeout(function() { document.getElementById("bell2").innerHTML = ""; }, 5000);
 
   }
